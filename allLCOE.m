@@ -1,4 +1,8 @@
- load('AnnualConsumption.mat')
+%%
+%
+
+
+load('AnnualConsumption.mat')
  load('PvSystemSize.mat')
  load('AnnualCHPGeneration.mat')
 DailyConsumption=AnnualConsumption/365; 
@@ -19,6 +23,9 @@ for y=1:6
             I(1,1)=PVSystemSize(R,C)*PVCostProj(y,1)*1000 + ...
                 StorageSize(R,C)*2*StoragCostProj(y,1) + ....
                 2*CHPCostProj(y,1); %Initial investment PV+Storage+CHP
+            UpFront(y,R,C)=PVSystemSize(R,C)*PVCostProj(y,1)*1000 + ...
+                StorageSize(R,C)*StoragCostProj(y,1) + ....
+                CHPCostProj(y,1);
             O=ones(T,1);
             O(1,1)=AnnualOpCost(R,C);
             F=zeros(T,1); 
