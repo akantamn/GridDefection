@@ -1,10 +1,16 @@
 %%
-%
+% Support files for "Quantifying Potential for Solar Hybrid Technology Enabled Grid Defection in Rural America"
+
+%Paper Authors: Abhilash Kantamneni, Richelle Winkler, Lucia Gauchia, Joshua M. Pearce
+
+%Code Author: Abhilash Kantamneni.
+
+%% Initialize Data
 
 
 load('AnnualConsumption.mat')
- load('PvSystemSize.mat')
- load('AnnualCHPGeneration.mat')
+load('PvSystemSize.mat')
+load('AnnualCHPGeneration.mat')
 DailyConsumption=AnnualConsumption/365; 
 StorageSize=DailyConsumption/2; %Size a battery to last 12 hours [kWh]
 PVCostProj=[3.5;2.9;2.5;2.1;1.8;1.5]; %Declining PV costs [$/kW]
@@ -13,6 +19,8 @@ CHPCostProj=ones(6,1)*1400; %CHP costs remain same, since tech is mature [$/kWe]
 NatGasCostProj=ones(6,1)*0.9; %Short term gas costs remain same [$/Therm]
 CHPOpCost=ones(6,1)*0.08; %Operating costs constant due to constant gas costs [$/Therm]
 Irate=0.0499;% Max interest rate available through Michigan Saves
+
+%% LCOE Calculation
 for y=1:6
     AnnualOpCost=CHPOpCost(y,1)*AnnualCHPGeneration;
     for R=1:8 % 8 UP utilities
@@ -58,9 +66,35 @@ for y=1:6
 
 end
 
-Year2015=reshape(LCOE(1,:,:),8,8);
-Year2016=reshape(LCOE(2,:,:),8,8);
-Year2017=reshape(LCOE(3,:,:),8,8);
-Year2018=reshape(LCOE(4,:,:),8,8);
-Yeare2019=reshape(LCOE(5,:,:),8,8);
-Year2020=reshape(LCOE(6,:,:),8,8);
+%% Save results in Table
+LRowNames={'Alger Delta';'Cloverland';'Xcel';'Municipal'; ...
+'OCREA';'UPPCO';'WE';'WPSC'};
+LColNames={'Seasonal' 'TotalCustomers' 'pHH1' 'pHH2' 'pHH3'  ...
+    'pHH4' 'pHH5' 'pHH6'};
+
+Year2015=array2table(reshape(LCOE(1,:,:),8,8), ...
+    'RowNames',LRowNames,'VariableNames',LColNames);
+Year2016=array2table(reshape(LCOE(2,:,:),8,8), ...
+    'RowNames',LRowNames,'VariableNames',LColNames);
+Year2017=array2table(reshape(LCOE(3,:,:),8,8), ...
+    'RowNames',LRowNames,'VariableNames',LColNames);
+Year2018=array2table(reshape(LCOE(4,:,:),8,8), ...
+    'RowNames',LRowNames,'VariableNames',LColNames);
+Year2019=array2table(reshape(LCOE(5,:,:),8,8), ...
+    'RowNames',LRowNames,'VariableNames',LColNames);
+Year2020=array2table(reshape(LCOE(6,:,:),8,8), ...
+    'RowNames',LRowNames,'VariableNames',LColNames);
+
+%% Print Results
+
+writetable(Year2015,'2015_LCOE.csv','Delimiter',',','WriteRowNames',true)
+writetable(Year2016,'2016_LCOE.csv','Delimiter',',','WriteRowNames',true)
+writetable(Year2017,'2017_LCOE.csv','Delimiter',',','WriteRowNames',true)
+writetable(Year2018,'2018_LCOE.csv','Delimiter',',','WriteRowNames',true)
+writetable(Year2019,'2019_LCOE.csv','Delimiter',',','WriteRowNames',true)
+writetable(Year2020,'2020_LCOE.csv','Delimiter',',','WriteRowNames',true)
+
+
+%% Clear all
+clear all
+clc
