@@ -21,6 +21,9 @@ CHPOpCost=ones(6,1)*0.08; %Operating costs constant due to constant gas costs [$
 Irate=0.0499;% Max interest rate available through Michigan Saves
 
 %% LCOE Calculation
+%Calculation based on K. Branker, M.J.M. Pathak, J.M. Pearce,
+% A Review of Solar Photovoltaic Levelized Cost of Electricity,
+%Renewable and Sustainable Energy Reviews, 15, pp.4470-4482 (2011).
 for y=1:6
     AnnualOpCost=CHPOpCost(y,1)*AnnualCHPGeneration;
     for R=1:8 % 8 UP utilities
