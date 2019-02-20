@@ -9,7 +9,7 @@
 
 
 load('AnnualConsumption.mat')
-load('PvSystemSize.mat')
+load('PVSystemSize.mat')
 load('AnnualCHPGeneration.mat')
 DailyConsumption=AnnualConsumption/365; 
 StorageSize=DailyConsumption/2; %Size a battery to last 12 hours [kWh]
@@ -54,8 +54,8 @@ for y=1:6
     
     NUM=0;
     DEN=0;
-    for j=1:T
-        O(j,1)=O(j,1)*1.02; %Operational costs increase with inflation
+    for j=2:T
+        O(j,1)=O(j-1,1)*1.02; %Operational costs increase with inflation
         
         NUM=NUM+((I(j,1)+O(j,1)+F(j,1))/(1+r)^j);
         DEN=DEN+((S*(1-d)^j)/(1+r)^j);
